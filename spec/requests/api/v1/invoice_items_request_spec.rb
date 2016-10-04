@@ -11,5 +11,13 @@ describe "Invoice Items CRUD API" do
     expect(invoice_items.count).to eq(3)
   end
 
-  it ""
+  it "returns a single invoice item" do
+    invoice_item = create(:invoice_item, quantity: 30)
+    get "/api/v1/invoice_items/#{invoice_item.id}.json"
+
+    raw_ii = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_ii["quantity"]).to eq(30)
+  end
 end
