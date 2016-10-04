@@ -20,4 +20,17 @@ describe "Items CRUD API" do
     expect(response.status).to eq(200)
     expect(raw_item["name"]).to eq("Sparkly Super Bounce Bouncy Ball")
   end
+
+  it "returns a random item" do
+    create(:item, name: "Beach Ball")
+    create(:item, name: "Teddy Bear")
+    create(:item, name: "Foam No.1 Fan Glove")
+    get '/api/v1/items/random.json'
+
+    random_item = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(['Beach Ball', 'Teddy Bear', 'Foam No.1 Fan Glove']).
+    to include(random_item["name"])
+  end
 end
