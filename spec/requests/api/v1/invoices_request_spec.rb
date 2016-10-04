@@ -10,4 +10,14 @@ describe "Invoices CRUD API" do
     expect(response).to be_success
     expect(invoices.count).to eq(3)
   end
+
+  it "returns a single invoice" do
+    invoice = create(:invoice, status: "shipped")
+    get "/api/v1/invoices/#{invoice.id}.json"
+
+    raw_invoice = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_invoice["status"]).to eq("shipped")
+  end
 end
