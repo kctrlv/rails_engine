@@ -94,9 +94,9 @@ describe "Invoices CRUD API" do
 
   it "finds all invoices by merchant id" do
     merchant = create(:merchant)
-    create(:invoice, merchant: merchant)
-    create(:invoice, merchant: merchant)
-    create(:invoice)
+               create(:invoice, merchant: merchant)
+               create(:invoice, merchant: merchant)
+               create(:invoice)
     get "/api/v1/invoices/find_all?merchant_id=#{merchant.id}"
 
     raw_invoices = JSON.parse(response.body)
@@ -105,5 +105,20 @@ describe "Invoices CRUD API" do
     expect(raw_invoices).to be_an(Array)
     expect(raw_invoices.count).to eq(2)
     expect(raw_invoices[0]["merchant_id"]).to eq(merchant.id)
+  end
+
+  it "finds all invoices by customer id" do
+    customer = create(:customer)
+               create(:invoice, customer: customer)
+               create(:invoice, customer: customer)
+               create(:invoice)
+    get "/api/v1/invoices/find_all?customer_id=#{customer.id}"
+
+    raw_invoices = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_invoices).to be_an(Array)
+    expect(raw_invoices.count).to eq(2)
+    expect(raw_invoices[0]["customer_id"]).to eq(customer.id)
   end
 end
