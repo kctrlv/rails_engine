@@ -18,14 +18,14 @@ describe 'Customers API' do
     expect(res['first_name']).to eq('Billy')
     expect(res['last_name']).to eq('Bobson')
   end
-  
-  # it 'returns a random Customer' do
-  #   merc1 = create(:customer, name: 'Adam')
-  #   merc2 = create(:customer, name: 'Betty')
-  #   merc3 = create(:customer, name: 'Carla')
-  #   get "/api/v1/customers/random.json"
-  #   res = JSON.parse(response.body)
-  #   expect(response).to be_success
-  #   expect(['Adam', 'Betty', 'Carla']).to include(res['name'])
-  # end
+
+  it 'returns a random Customer' do
+    cust1 = create(:customer, first_name: 'Adam')
+    cust2 = create(:customer, first_name: 'Betty')
+    cust3 = create(:customer, first_name: 'Carla')
+    get "/api/v1/customers/random.json"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(['Adam', 'Betty', 'Carla']).to include(res['first_name'])
+  end
 end
