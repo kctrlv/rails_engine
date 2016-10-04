@@ -1,4 +1,4 @@
-Rails.application.routes.draw do      
+Rails.application.routes.draw do
   get '/api/v1/items/random', to: 'api/v1/items#random'
   get '/api/v1/invoices/random', to: 'api/v1/invoices#random'
   get '/api/v1/invoice_items/random', to: 'api/v1/invoice_items#random'
@@ -8,6 +8,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      namespace :items do
+        get '/find', to: 'search#show'
+      end
       resources :items, only: [:index, :show]
       resources :invoices, only: [:index, :show]
       resources :invoice_items, only: [:index, :show]

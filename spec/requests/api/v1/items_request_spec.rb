@@ -33,4 +33,14 @@ describe "Items CRUD API" do
     expect(['Beach Ball', 'Teddy Bear', 'Foam No.1 Fan Glove']).
     to include(random_item["name"])
   end
+
+  it "finds a single item by id" do
+    item = create(:item, name: "Beach Ball")
+    get "/api/v1/items/find?id=#{item.id}"
+
+    raw_item = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_item.name).to eq("Beach Ball")
+  end
 end
