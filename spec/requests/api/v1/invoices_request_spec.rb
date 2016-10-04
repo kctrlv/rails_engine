@@ -91,4 +91,19 @@ describe "Invoices CRUD API" do
     expect(raw_invoice).to be_an(Array)
     expect(raw_invoice[0]["id"]).to eq(invoice.id)
   end
+
+  it "finds all invoices by merchant id" do
+    merchant = create(:merchant)
+    create(:invoice, merchant: merchant)
+    create(:invoice, merchant: merchant)
+    create(:invoice)
+    get "/api/v1/invoices/find_all?merchant_id=#{merchant.id}"
+
+    raw_invoices = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_invoices).to be_an(Array)
+    expect(raw_invoices.count).to eq(2)
+    expect(raw_invoices[0]["merchant_id"]).to eq(merchant.id)
+  end
 end
