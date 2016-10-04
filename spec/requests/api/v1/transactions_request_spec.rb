@@ -17,14 +17,14 @@ describe 'Transactions API' do
     expect(response).to be_success
     expect(res['credit_card_number']).to eq('1001200230034004')
   end
-  #
-  # it 'returns a random Transaction' do
-  #   merc1 = create(:transaction, name: 'Adam')
-  #   merc2 = create(:transaction, name: 'Betty')
-  #   merc3 = create(:transaction, name: 'Carla')
-  #   get "/api/v1/transactions/random.json"
-  #   res = JSON.parse(response.body)
-  #   expect(response).to be_success
-  #   expect(['Adam', 'Betty', 'Carla']).to include(res['name'])
-  # end
+
+  it 'returns a random Transaction' do
+    tx1 = create(:transaction, credit_card_number: '1001')
+    tx2 = create(:transaction, credit_card_number: '1002')
+    tx3 = create(:transaction, credit_card_number: '1003')
+    get "/api/v1/transactions/random.json"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(['1001', '1002', '1003']).to include(res['credit_card_number'])
+  end
 end
