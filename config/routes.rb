@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   get '/api/v1/customers/random', to: 'api/v1/customers#random'
 
   get '/api/v1/merchants/find', to: 'api/v1/merchants/search#show'
+  get '/api/v1/customers/find', to: 'api/v1/customers/search#show'
+
 
   namespace :api do
     namespace :v1 do
