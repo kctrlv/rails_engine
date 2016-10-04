@@ -44,4 +44,16 @@ describe "Invoices CRUD API" do
     expect(raw_invoice["id"]).to eq(invoice.id)
     expect(raw_invoice["status"]).to eq("shipped")
   end
+
+  it "finds a single invoice by merchant id" do
+    merchant = create(:merchant)
+    invoice  = create(:invoice, merchant: merchant)
+    get "/api/v1/invoices/find?merchant_id=#{merchant.id}"
+
+    raw_invoice = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_invoice["id"]).to eq(invoice.id)
+    expect(raw_invoice["merchant_id"]).to eq(merchant.id)
+  end
 end
