@@ -52,4 +52,37 @@ describe 'Customers API' do
     expect(response).to be_success
     expect(res['last_name']).to eq('Stevenson')
   end
+
+  it 'finds all customers of an id' do
+    cust = create(:customer, first_name: 'Adam')
+    create(:customer, first_name: 'Bob')
+    create(:customer, first_name: 'Carl')
+    get "/api/v1/customers/find_all?id=#{cust.id}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(1)
+    expect(res.first['id']).to eq(cust.id)
+  end
+
+  it 'finds all customers of a first name' do
+    create(:customer, first_name: 'Adam')
+    create(:customer, first_name: 'Jim')
+    create(:customer, first_name: 'Adam')
+    get "/api/v1/customers/find_all?first_name=Adam"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.first['first_name']).to eq("Adam")
+  end
+
+  it 'finds all customers of a last name' do
+    create(:customer, last_name: 'Boberta')
+    create(:customer, last_name: 'Jim')
+    create(:customer, last_name: 'Boberta')
+    get "/api/v1/customers/find_all?last_name=Boberta"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.last['last_name']).to eq("Boberta")
+  end
 end

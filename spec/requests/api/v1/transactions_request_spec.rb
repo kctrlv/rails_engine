@@ -70,6 +70,47 @@ describe 'Transactions API' do
     expect(res['result']).to eq('failed')
   end
 
+  it 'finds all transactions of an id' do
+    tx = create(:transaction)
+    create(:transaction)
+    create(:transaction)
+    get "/api/v1/transactions/find_all?id=#{tx.id}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(1)
+    expect(res.first['id']).to eq(tx.id)
+  end
 
+  it 'finds all transactions by credit card number' do
+    create(:transaction, credit_card_number: '1001200210012002')
+    create(:transaction, credit_card_number: '2002300340045005')
+    create(:transaction, credit_card_number: '1001200210012002')
+    get "/api/v1/transactions/find_all?credit_card_number=1001200210012002"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.first['credit_card_number']).to eq("1001200210012002")
+  end
 
+  it 'finds all transactions by credit card expiration date' do
+    create(:transaction, credit_card_expiration_date: '01-20')
+    create(:transaction, credit_card_expiration_date: '01-19')
+    create(:transaction, credit_card_expiration_date: '01-20')
+    get "/api/v1/transactions/find_all?credit_card_expiration_date=01-20"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.last['credit_card_expiration_date']).to eq("01-20")
+  end
+
+  it 'finds all transactions by result' do
+    create(:transaction, result: 'success')
+    create(:transaction, result: 'failed')
+    create(:transaction, result: 'success')
+    get "/api/v1/transactions/find_all?result=success"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.last['result']).to eq("success")
+  end
 end
