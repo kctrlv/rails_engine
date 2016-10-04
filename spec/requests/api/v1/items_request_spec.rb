@@ -41,6 +41,16 @@ describe "Items CRUD API" do
     raw_item = JSON.parse(response.body)
 
     expect(response).to be_success
-    expect(raw_item.name).to eq("Beach Ball")
+    expect(raw_item["name"]).to eq("Beach Ball")
+  end
+
+  it "finds a single item by name" do
+    item = create(:item, name: "Beach Ball")
+    get "/api/v1/items/find?id=beach-ball"
+
+    raw_item = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_item["name"]).to eq("Beach Ball")
   end
 end
