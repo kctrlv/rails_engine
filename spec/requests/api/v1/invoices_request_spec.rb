@@ -121,4 +121,18 @@ describe "Invoices CRUD API" do
     expect(raw_invoices.count).to eq(2)
     expect(raw_invoices[0]["customer_id"]).to eq(customer.id)
   end
+
+  it "finds all invoices by status" do
+    create(:invoice, status: "pending")
+    create(:invoice, status: "pending")
+    create(:invoice)
+    get "/api/v1/invoices/find_all?status=pending"
+
+    raw_invoices = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_invoices).to be_an(Array)
+    expect(raw_invoices.count).to eq(2)
+    expect(raw_invoices[0]["status"]).to eq("pending")
+  end
 end
