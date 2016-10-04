@@ -10,14 +10,15 @@ describe 'Customers API' do
     expect(res.first['id']).to eq(customers.first.id)
   end
 
-  # it 'returns a single Customer' do
-  #   customer = create(:customer, name: 'Billy')
-  #   get "/api/v1/customers/#{customer.id}.json"
-  #   res = JSON.parse(response.body)
-  #   expect(response).to be_success
-  #   expect(res['name']).to eq('Billy')
-  # end
-  #
+  it 'returns a single Customer' do
+    customer = create(:customer, first_name: 'Billy', last_name: 'Bobson')
+    get "/api/v1/customers/#{customer.id}.json"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['first_name']).to eq('Billy')
+    expect(res['last_name']).to eq('Bobson')
+  end
+  
   # it 'returns a random Customer' do
   #   merc1 = create(:customer, name: 'Adam')
   #   merc2 = create(:customer, name: 'Betty')
