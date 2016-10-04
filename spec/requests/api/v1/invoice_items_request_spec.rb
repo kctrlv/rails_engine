@@ -20,4 +20,17 @@ describe "Invoice Items CRUD API" do
     expect(response).to be_success
     expect(raw_ii["quantity"]).to eq(30)
   end
+
+  it "returnes a random invoice item" do
+    create(:invoice_item, quantity: 10)
+    create(:invoice_item, quantity: 20)
+    create(:invoice_item, quantity: 30)
+    get '/api/v1/invoice_items/random.json'
+
+    random_ii = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect([10, 20, 30]).
+    to include(random_ii["quantity"])
+  end
 end
