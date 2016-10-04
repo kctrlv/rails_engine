@@ -8,6 +8,6 @@ class Api::V1::InvoiceItemsController < ApplicationController
   end
 
   def random
-
+    render json: InvoiceItem.all.sample
   end
 end
