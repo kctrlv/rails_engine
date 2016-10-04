@@ -46,7 +46,7 @@ describe "Items CRUD API" do
 
   it "finds a single item by name" do
     item = create(:item, name: "Beach Ball")
-    get "/api/v1/items/find?id=beach-ball"
+    get "/api/v1/items/find?name=#{item.name}"
 
     raw_item = JSON.parse(response.body)
 

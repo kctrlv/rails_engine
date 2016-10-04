@@ -6,11 +6,10 @@ Rails.application.routes.draw do
   get '/api/v1/transactions/random', to: 'api/v1/transactions#random'
   get '/api/v1/customers/random', to: 'api/v1/customers#random'
 
+  get '/api/v1/items/find', to: 'api/v1/items/search#show'
+
   namespace :api do
     namespace :v1 do
-      namespace :items do
-        get '/find', to: 'search#show'
-      end
       resources :items, only: [:index, :show]
       resources :invoices, only: [:index, :show]
       resources :invoice_items, only: [:index, :show]
