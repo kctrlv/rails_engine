@@ -33,4 +33,15 @@ describe "Invoices CRUD API" do
     expect(['pending', 'shipped', 'returned']).
     to include(random_invoice["status"])
   end
+
+  it "finds a single invoice by id" do
+    invoice = create(:invoice, status: "shipped")
+    get "/api/v1/invoices/find?id=#{invoice.id}"
+
+    raw_invoice = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_invoice["id"]).to eq(invoice.id)
+    expect(raw_invoice["status"]).to eq("shipped")
+  end
 end
