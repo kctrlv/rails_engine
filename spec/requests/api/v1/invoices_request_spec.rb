@@ -20,4 +20,17 @@ describe "Invoices CRUD API" do
     expect(response).to be_success
     expect(raw_invoice["status"]).to eq("shipped")
   end
+
+  it "returns a random invoice" do
+    create(:invoice, status: "pending")
+    create(:invoice, status: "shipped")
+    create(:invoice, status: "returned")
+    get '/api/v1/invoices/random.json'
+
+    random_invoice = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(['pending', 'shipped', 'returned']).
+    to include(random_invoice["status"])
+  end
 end
