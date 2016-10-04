@@ -53,4 +53,14 @@ describe "Items CRUD API" do
     expect(response).to be_success
     expect(raw_item["name"]).to eq("Beach Ball")
   end
+
+  it "finds a single item by description" do
+    item = create(:item, description: "Light-weight and versitile")
+    get "/api/v1/items/find?description=#{item.description}"
+
+    raw_item = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_item["description"]).to eq("Light-weight and versitile")
+  end
 end
