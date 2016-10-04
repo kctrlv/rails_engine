@@ -27,4 +27,38 @@ describe 'Merchants API' do
     expect(response).to be_success
     expect(['Adam', 'Betty', 'Carla']).to include(res['name'])
   end
+
+  it 'finds a single merchant by id' do
+    merc = create(:merchant, name: 'Adam')
+    get "/api/v1/merchants/find?id=#{merc.id}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['name']).to eq('Adam')
+  end
+
+  it 'finds a single merchant by name' do
+    create(:merchant, name: 'Adam')
+    get "/api/v1/merchants/find?name=Adam"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['name']).to eq('Adam')
+  end
+
+  xit 'finds a single merchant by created at' do
+    merc = create(:merchant, name: 'Adam')
+    get "/api/v1/merchants/find?created_at=#{merc.created_at}"
+    byebug
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['name']).to eq('Adam')
+  end
+
+  xit 'finds a single merchant by updated at' do
+    merc = create(:merchant, name: 'Adam')
+    get "/api/v1/merchants/find?created_at=#{merc.updated_at}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['name']).to eq('Adam')
+  end
+
 end
