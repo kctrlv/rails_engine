@@ -73,7 +73,7 @@ describe "Items CRUD API" do
     raw_item = JSON.parse(response.body)
 
     expect(response).to be_success
-    expect(raw_item).to be_a(Array)
+    expect(raw_item).to be_an(Array)
     expect(raw_item[0]["name"]).to eq("Foam No.1 Fan Glove")
   end
 
@@ -85,7 +85,7 @@ describe "Items CRUD API" do
     items = JSON.parse(response.body)
 
     expect(response).to be_success
-    expect(items).to be_a(Array)
+    expect(items).to be_an(Array)
     expect(items.count).to eq(3)
     expect(items[0]["name"]).to eq("MyText")
   end
@@ -98,7 +98,7 @@ describe "Items CRUD API" do
     items = JSON.parse(response.body)
 
     expect(response).to be_success
-    expect(items).to be_a(Array)
+    expect(items).to be_an(Array)
     expect(items.count).to eq(3)
     expect(items[0]["description"]).to eq("MyText")
   end
