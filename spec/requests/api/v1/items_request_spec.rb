@@ -76,4 +76,17 @@ describe "Items CRUD API" do
     expect(raw_item).to be_a(Array)
     expect(raw_item[0]["name"]).to eq("Foam No.1 Fan Glove")
   end
+
+  it "finds all items by name" do
+    create_list(:item, 3)
+    item = create(:item, name: "Teddy Bear")
+    get "/api/v1/items/find_all?name=MyText"
+
+    items = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(items).to be_a(Array)
+    expect(items.count).to eq(3)
+    expect(items[0]["name"]).to eq("MyText")
+  end
 end
