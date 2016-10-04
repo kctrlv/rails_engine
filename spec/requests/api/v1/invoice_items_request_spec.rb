@@ -10,4 +10,6 @@ describe "Invoice Items CRUD API" do
     expect(response).to be_success
     expect(invoice_items.count).to eq(3)
   end
+
+  it ""
 end
