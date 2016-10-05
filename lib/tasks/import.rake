@@ -61,5 +61,4 @@ namespace :import do
   task rebuild: ["db:drop", "db:create", "db:migrate"]
 
   task all: ["merchants", "customers", "invoices", "items", "invoice_items", "transactions"]
-
 end
