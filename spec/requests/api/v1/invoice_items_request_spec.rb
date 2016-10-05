@@ -101,4 +101,16 @@ describe "Invoice Items CRUD API" do
     expect(raw_ii["id"]).to eq(invoice_item.id)
     expect(raw_ii["unit_price"]).to eq(2000)
   end
+
+  xit "finds a single invoice item by creation date" do
+    invoice_item = create(:invoice_item)
+    get "/api/v1/invoice_items/find?created_at=#{invoice_item.created_at}"
+    byebug
+
+    raw_ii = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_ii["id"]).to eq(invoice_item.id)
+    expect(raw_ii["created_at"]).to eq(invoice_item.created_at)
+  end
 end
