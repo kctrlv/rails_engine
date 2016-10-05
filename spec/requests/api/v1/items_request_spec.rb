@@ -102,4 +102,14 @@ describe "Items CRUD API" do
     expect(items.count).to eq(3)
     expect(items[0]["description"]).to eq("MyText")
   end
+
+  it 'omits timestamp data from json response' do
+    items = create_list(:item, 3)
+    get '/api/v1/items.json'
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(3)
+    expect(res.first.keys).to eq(['id', 'name', 'description', 'unit_price', 'merchant_id'])
+  end
+
 end
