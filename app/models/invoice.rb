@@ -6,7 +6,7 @@ class Invoice < ApplicationRecord
   has_many :invoice_items
 
   def total
-    
+
   end
 
   def has_transactions?
@@ -14,8 +14,6 @@ class Invoice < ApplicationRecord
   end
 
   def paid_in_full?
-    has_transactions? && transactions.any? do |transaction|
-      transaction.result == "success"
-    end
+    transactions.exists?(result: "success")
   end
 end
