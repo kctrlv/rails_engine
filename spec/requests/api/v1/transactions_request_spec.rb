@@ -113,4 +113,48 @@ describe 'Transactions API' do
     expect(res.count).to eq(2)
     expect(res.last['result']).to eq("success")
   end
+
+  it 'finds a single transaction by created at' do
+    tx1 = create(:transaction, credit_card_number: '1001100110011002', created_at: "2012-03-27T14:54:05.000Z")
+    tx2 = create(:transaction, credit_card_number: '1001100110011003', created_at: "2012-03-28T14:54:05.000Z")
+    tx3 = create(:transaction, credit_card_number: '1001100110011004', created_at: "2012-03-29T14:54:05.000Z")
+    get "/api/v1/transactions/find?created_at=#{tx2.created_at}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['credit_card_number']).to eq('1001100110011003')
+  end
+
+  it 'finds a single transaction by updated at' do
+    tx1 = create(:transaction, credit_card_number: '1001100110011002', updated_at: "2012-03-27T14:54:05.000Z")
+    tx2 = create(:transaction, credit_card_number: '1001100110011003', updated_at: "2012-03-28T14:54:05.000Z")
+    tx3 = create(:transaction, credit_card_number: '1001100110011004', updated_at: "2012-03-29T14:54:05.000Z")
+    get "/api/v1/transactions/find?updated_at=#{tx2.updated_at}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['credit_card_number']).to eq('1001100110011003')
+  end
+
+  it 'finds all transactions by created at' do
+    tx1 = create(:transaction, credit_card_number: '1001100110011002', created_at: "2012-03-27T14:54:05.000Z")
+    tx2 = create(:transaction, credit_card_number: '1001100110011003', created_at: "2012-03-28T14:54:05.000Z")
+    tx3 = create(:transaction, credit_card_number: '1001100110011004', created_at: "2012-03-27T14:54:05.000Z")
+    get "/api/v1/transactions/find_all?created_at=2012-03-27T14:54:05.000Z"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.first['credit_card_number']).to eq("1001100110011002")
+    expect(res.last['credit_card_number']).to eq("1001100110011004")
+  end
+
+  it 'finds all transactions by updated at' do
+    tx1 = create(:transaction, credit_card_number: '1001100110011002', updated_at: "2012-03-27T14:54:05.000Z")
+    tx2 = create(:transaction, credit_card_number: '1001100110011003', updated_at: "2012-03-28T14:54:05.000Z")
+    tx3 = create(:transaction, credit_card_number: '1001100110011004', updated_at: "2012-03-27T14:54:05.000Z")
+    get "/api/v1/transactions/find_all?updated_at=2012-03-27T14:54:05.000Z"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.first['credit_card_number']).to eq("1001100110011002")
+    expect(res.last['credit_card_number']).to eq("1001100110011004")
+  end
 end
