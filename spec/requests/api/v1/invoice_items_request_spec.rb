@@ -113,4 +113,14 @@ describe "Invoice Items CRUD API" do
     expect(raw_ii["id"]).to eq(invoice_item.id)
     expect(raw_ii["created_at"]).to eq(invoice_item.created_at)
   end
+
+  it 'omits timestamp data from json response' do
+    invoice_items = create_list(:invoice_item, 3)
+    get '/api/v1/invoice_items.json'
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(3)
+    expect(res.first.keys).to eq(['id', 'item_id', 'invoice_id', 'quantity', 'unit_price'])
+  end
+
 end
