@@ -129,4 +129,13 @@ describe 'Customers API' do
     expect(res.first['first_name']).to eq("Adam")
     expect(res.last['first_name']).to eq("Carla")
   end
+
+  it 'omits timestamp data from json response' do
+    customers = create_list(:customer, 3)
+    get '/api/v1/customers.json'
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(3)
+    expect(res.first.keys).to eq(['id', 'first_name', 'last_name'])
+  end
 end
