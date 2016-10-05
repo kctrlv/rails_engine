@@ -120,7 +120,7 @@ describe 'Merchants API' do
     expect(res.first.keys).to eq(['id', 'name'])
   end
 
-  it 'finds total revenue for single merchant' do
+  xit 'finds total revenue for single merchant' do
     merchant       = create(:merchant)
     invoice_1      = create(:invoice, merchant: merchant)
     invoice_2      = create(:invoice, merchant: merchant)
