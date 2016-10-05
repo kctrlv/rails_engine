@@ -45,14 +45,25 @@ describe 'Merchants API' do
   # end
 
   it 'finds a single merchant by created at' do
-    merc1 = create(:merchant, name: 'Adam')
-    merc2 = create(:merchant, name: 'Bob')
-    merc3 = create(:merchant, name: 'Carla')
+    merc1 = create(:merchant, name: 'Adam', created_at: "2012-03-27T14:54:05.000Z")
+    merc2 = create(:merchant, name: 'Bob', created_at: "2012-03-28T14:54:05.000Z")
+    merc3 = create(:merchant, name: 'Carla', created_at: "2012-03-29T14:54:05.000Z")
     get "/api/v1/merchants/find?created_at=#{merc2.created_at}"
     res = JSON.parse(response.body)
     expect(response).to be_success
     expect(res['name']).to eq('Bob')
   end
+
+  it 'finds a single merchant by updated at' do
+    merc1 = create(:merchant, name: 'Adam', updated_at: "2012-03-27T14:54:05.000Z")
+    merc2 = create(:merchant, name: 'Bob', updated_at: "2012-03-28T14:54:05.000Z")
+    merc3 = create(:merchant, name: 'Carla', updated_at: "2012-03-29T14:54:05.000Z")
+    get "/api/v1/merchants/find?updated_at=#{merc2.updated_at}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['name']).to eq('Bob')
+  end
+
 
   # it 'finds all merchants of an id' do
   #   merc = create(:merchant, name: 'Adam')
