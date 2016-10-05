@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161005180152) do
+ActiveRecord::Schema.define(version: 20161005210232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20161005180152) do
     t.integer  "item_id"
     t.integer  "invoice_id"
     t.integer  "quantity"
-    t.integer  "unit_price"
+    t.decimal  "unit_price", precision: 8, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id", using: :btree
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20161005180152) do
   create_table "items", force: :cascade do |t|
     t.text     "name"
     t.text     "description"
-    t.integer  "unit_price"
+    t.decimal  "unit_price",  precision: 8, scale: 2
     t.integer  "merchant_id"
     t.datetime "created_at"
     t.datetime "updated_at"
