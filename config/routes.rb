@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   get '/api/v1/items/find', to: 'api/v1/items/search#show'
   get '/api/v1/items/find_all', to: 'api/v1/items/search#index'
 
+  get '/api/v1/invoice_items/find', to: 'api/v1/invoice_items/search#show'
+  # get '/api/v1/invoice_items/find_all', to: 'api/v1/invoices/search#index'
+
   get '/api/v1/invoices/find', to: 'api/v1/invoices/search#show'
   get '/api/v1/invoices/find_all', to: 'api/v1/invoices/search#index'
 

@@ -33,4 +33,15 @@ describe "Invoice Items CRUD API" do
     expect([10, 20, 30]).
     to include(random_ii["quantity"])
   end
+
+  it "finds a single invoice item by id" do
+    invoice_item = create(:invoice_item, quantity: 101)
+    get "/api/v1/invoice_items/find?id=#{invoice_item.id}"
+
+    raw_ii = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_ii["id"]).to eq(invoice_item.id)
+    expect(raw_ii["quantity"]).to eq(101)
+  end
 end
