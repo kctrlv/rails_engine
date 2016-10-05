@@ -144,4 +144,50 @@ describe "Invoices CRUD API" do
     expect(res.count).to eq(3)
     expect(res.first.keys).to eq(['id', 'customer_id', 'merchant_id', 'status'])
   end
+
+  it 'finds a single invoice by created at' do
+    inv1 = create(:invoice, status: 'success', created_at: "2012-03-27T14:54:05.000Z")
+    inv2 = create(:invoice, status: 'failed', created_at: "2012-03-28T14:54:05.000Z")
+    inv3 = create(:invoice, status: 'success', created_at: "2012-03-29T14:54:05.000Z")
+    get "/api/v1/invoices/find?created_at=#{inv2.created_at}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['status']).to eq('failed')
+  end
+
+  it 'finds a single invoice by updated at' do
+    inv1 = create(:invoice, status: 'success', updated_at: "2012-03-27T14:54:05.000Z")
+    inv2 = create(:invoice, status: 'failed', updated_at: "2012-03-28T14:54:05.000Z")
+    inv3 = create(:invoice, status: 'success', updated_at: "2012-03-29T14:54:05.000Z")
+    get "/api/v1/invoices/find?updated_at=#{inv2.updated_at}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['status']).to eq('failed')
+  end
+
+  it 'finds all invoices by created at' do
+    inv1 = create(:invoice, status: 'success', created_at: "2012-03-27T14:54:05.000Z")
+    inv2 = create(:invoice, status: 'failed', created_at: "2012-03-28T14:54:05.000Z")
+    inv3 = create(:invoice, status: 'success', created_at: "2012-03-27T14:54:05.000Z")
+    get "/api/v1/invoices/find_all?created_at=2012-03-27T14:54:05.000Z"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.first['status']).to eq("success")
+    expect(res.last['status']).to eq("success")
+  end
+
+  it 'finds all invoices by updated at' do
+    inv1 = create(:invoice, status: 'success', updated_at: "2012-03-27T14:54:05.000Z")
+    inv2 = create(:invoice, status: 'failed', updated_at: "2012-03-28T14:54:05.000Z")
+    inv3 = create(:invoice, status: 'success', updated_at: "2012-03-27T14:54:05.000Z")
+    get "/api/v1/invoices/find_all?updated_at=2012-03-27T14:54:05.000Z"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.first['status']).to eq("success")
+    expect(res.last['status']).to eq("success")
+  end
+
+
 end

@@ -112,4 +112,47 @@ describe "Items CRUD API" do
     expect(res.first.keys).to eq(['id', 'name', 'description', 'unit_price', 'merchant_id'])
   end
 
+  it 'finds a single item by created at' do
+    item1 = create(:item, name: 'Adam', created_at: "2012-03-27T14:54:05.000Z")
+    item2 = create(:item, name: 'Bob', created_at: "2012-03-28T14:54:05.000Z")
+    item3 = create(:item, name: 'Carla', created_at: "2012-03-29T14:54:05.000Z")
+    get "/api/v1/items/find?created_at=#{item2.created_at}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['name']).to eq('Bob')
+  end
+
+  it 'finds a single item by updated at' do
+    item1 = create(:item, name: 'Adam', updated_at: "2012-03-27T14:54:05.000Z")
+    item2 = create(:item, name: 'Bob', updated_at: "2012-03-28T14:54:05.000Z")
+    item3 = create(:item, name: 'Carla', updated_at: "2012-03-29T14:54:05.000Z")
+    get "/api/v1/items/find?updated_at=#{item2.updated_at}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['name']).to eq('Bob')
+  end
+
+  it 'finds all items by created at' do
+    item1 = create(:item, name: 'Adam', created_at: "2012-03-27T14:54:05.000Z")
+    item2 = create(:item, name: 'Bob', created_at: "2012-03-28T14:54:05.000Z")
+    item3 = create(:item, name: 'Carla', created_at: "2012-03-27T14:54:05.000Z")
+    get "/api/v1/items/find_all?created_at=2012-03-27T14:54:05.000Z"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.first['name']).to eq("Adam")
+    expect(res.last['name']).to eq("Carla")
+  end
+
+  it 'finds all items by updated at' do
+    item1 = create(:item, name: 'Adam', updated_at: "2012-03-27T14:54:05.000Z")
+    item2 = create(:item, name: 'Bob', updated_at: "2012-03-28T14:54:05.000Z")
+    item3 = create(:item, name: 'Carla', updated_at: "2012-03-27T14:54:05.000Z")
+    get "/api/v1/items/find_all?updated_at=2012-03-27T14:54:05.000Z"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.first['name']).to eq("Adam")
+    expect(res.last['name']).to eq("Carla")
+  end
 end

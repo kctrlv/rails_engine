@@ -92,26 +92,14 @@ describe "Invoice Items CRUD API" do
   end
 
   it "finds a single invoice item by unit price" do
-    invoice_item = create(:invoice_item, unit_price: 2000)
+    invoice_item = create(:invoice_item, unit_price: 20.00)
     get "/api/v1/invoice_items/find?unit_price=#{invoice_item.unit_price}"
 
     raw_ii = JSON.parse(response.body)
 
     expect(response).to be_success
     expect(raw_ii["id"]).to eq(invoice_item.id)
-    expect(raw_ii["unit_price"]).to eq(2000)
-  end
-
-  xit "finds a single invoice item by creation date" do
-    invoice_item = create(:invoice_item)
-    get "/api/v1/invoice_items/find?created_at=#{invoice_item.created_at}"
-    byebug
-
-    raw_ii = JSON.parse(response.body)
-
-    expect(response).to be_success
-    expect(raw_ii["id"]).to eq(invoice_item.id)
-    expect(raw_ii["created_at"]).to eq(invoice_item.created_at)
+    expect(raw_ii["unit_price"]).to eq("20.0")
   end
 
   it 'omits timestamp data from json response' do
@@ -122,5 +110,4 @@ describe "Invoice Items CRUD API" do
     expect(res.count).to eq(3)
     expect(res.first.keys).to eq(['id', 'item_id', 'invoice_id', 'quantity', 'unit_price'])
   end
-
 end

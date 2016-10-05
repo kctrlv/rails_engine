@@ -3,6 +3,11 @@ class Api::V1::InvoiceItems::SearchController < ApplicationController
     render json: InvoiceItem.find_by(invoice_item_params)
   end
 
+  def index
+    render json: InvoiceItem.where(invoice_item_params)
+  end
+
+
 private
   def invoice_item_params
     params.permit(:id,

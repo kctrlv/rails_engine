@@ -35,7 +35,9 @@ namespace :import do
     Item.delete_all
     puts "\t Importing Items...\n\n"
     CSV.foreach('data/items.csv', :headers => true) do |row|
-      Item.create!(row.to_hash)
+      row = row.to_hash
+      row['unit_price'] = (row['unit_price'].to_d / 100)
+      Item.create!(row)
     end
   end
 
@@ -45,7 +47,9 @@ namespace :import do
     puts "\t Importing InvoiceItems...\n\n"
 
     CSV.foreach('data/invoice_items.csv', :headers => true) do |row|
-      InvoiceItem.create!(row.to_hash)
+      row = row.to_hash
+      row['unit_price'] = (row['unit_price'].to_d / 100)
+      InvoiceItem.create!(row)
     end
   end
 
