@@ -85,4 +85,57 @@ describe 'Customers API' do
     expect(res.count).to eq(2)
     expect(res.last['last_name']).to eq("Boberta")
   end
+
+  it 'finds a single customer by created at' do
+    cust1 = create(:customer, first_name: 'Adam', created_at: "2012-03-27T14:54:05.000Z")
+    cust2 = create(:customer, first_name: 'Bob', created_at: "2012-03-28T14:54:05.000Z")
+    cust3 = create(:customer, first_name: 'Carla', created_at: "2012-03-29T14:54:05.000Z")
+    get "/api/v1/customers/find?created_at=#{cust2.created_at}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['first_name']).to eq('Bob')
+  end
+
+  it 'finds a single customer by updated at' do
+    cust1 = create(:customer, first_name: 'Adam', updated_at: "2012-03-27T14:54:05.000Z")
+    cust2 = create(:customer, first_name: 'Bob', updated_at: "2012-03-28T14:54:05.000Z")
+    cust3 = create(:customer, first_name: 'Carla', updated_at: "2012-03-29T14:54:05.000Z")
+    get "/api/v1/customers/find?updated_at=#{cust2.updated_at}"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res['first_name']).to eq('Bob')
+  end
+
+  it 'finds all customers by created at' do
+    cust1 = create(:customer, first_name: 'Adam', created_at: "2012-03-27T14:54:05.000Z")
+    cust2 = create(:customer, first_name: 'Bob', created_at: "2012-03-28T14:54:05.000Z")
+    cust3 = create(:customer, first_name: 'Carla', created_at: "2012-03-27T14:54:05.000Z")
+    get "/api/v1/customers/find_all?created_at=2012-03-27T14:54:05.000Z"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.first['first_name']).to eq("Adam")
+    expect(res.last['first_name']).to eq("Carla")
+  end
+
+  it 'finds all customers by updated at' do
+    cust1 = create(:customer, first_name: 'Adam', updated_at: "2012-03-27T14:54:05.000Z")
+    cust2 = create(:customer, first_name: 'Bob', updated_at: "2012-03-28T14:54:05.000Z")
+    cust3 = create(:customer, first_name: 'Carla', updated_at: "2012-03-27T14:54:05.000Z")
+    get "/api/v1/customers/find_all?updated_at=2012-03-27T14:54:05.000Z"
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(2)
+    expect(res.first['first_name']).to eq("Adam")
+    expect(res.last['first_name']).to eq("Carla")
+  end
+
+  it 'omits timestamp data from json response' do
+    customers = create_list(:customer, 3)
+    get '/api/v1/customers.json'
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(3)
+    expect(res.first.keys).to eq(['id', 'first_name', 'last_name'])
+  end
 end
