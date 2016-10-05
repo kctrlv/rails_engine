@@ -56,4 +56,49 @@ describe "Invoice Items CRUD API" do
     expect(raw_ii["id"]).to eq(invoice_item.id)
     expect(raw_ii["item_id"]).to eq(item.id)
   end
+
+  it "finds a single invoice item by invoice id" do
+    invoice      = create(:invoice)
+    invoice_item = create(:invoice_item, invoice: invoice)
+    get "/api/v1/invoice_items/find?invoice_id=#{invoice.id}"
+
+    raw_ii = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_ii["id"]).to eq(invoice_item.id)
+    expect(raw_ii["invoice_id"]).to eq(invoice.id)
+  end
+
+  it "finds a single invoice item by quantity" do
+    invoice_item = create(:invoice_item, quantity: 202)
+    get "/api/v1/invoice_items/find?quantity=202"
+
+    raw_ii = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_ii["id"]).to eq(invoice_item.id)
+    expect(raw_ii["quantity"]).to eq(202)
+  end
+
+  it "finds a single invoice item by quantity" do
+    invoice_item = create(:invoice_item, quantity: 202)
+    get "/api/v1/invoice_items/find?quantity=202"
+
+    raw_ii = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_ii["id"]).to eq(invoice_item.id)
+    expect(raw_ii["quantity"]).to eq(202)
+  end
+
+  it "finds a single invoice item by unit price" do
+    invoice_item = create(:invoice_item, unit_price: 2000)
+    get "/api/v1/invoice_items/find?unit_price=#{invoice_item.unit_price}"
+
+    raw_ii = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_ii["id"]).to eq(invoice_item.id)
+    expect(raw_ii["unit_price"]).to eq(2000)
+  end
 end
