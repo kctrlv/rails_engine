@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   get '/api/v1/transactions/random', to: 'api/v1/transactions#random'
   get '/api/v1/customers/random', to: 'api/v1/customers#random'
 
-
   get '/api/v1/items/find', to: 'api/v1/items/search#show'
   get '/api/v1/items/find_all', to: 'api/v1/items/search#index'
 
@@ -17,6 +16,8 @@ Rails.application.routes.draw do
   get '/api/v1/merchants/find_all', to: 'api/v1/merchants/search#index'
   get '/api/v1/customers/find_all', to: 'api/v1/customers/search#index'
   get '/api/v1/transactions/find_all', to: 'api/v1/transactions/search#index'
+
+  get '/api/v1/merchants/:id/revenue', to: 'api/v1/merchants/single_merchant_revenue#show'
 
   namespace :api do
     namespace :v1 do
