@@ -64,4 +64,19 @@ describe 'Merchants API' do
     expect(response).to be_success
     expect(res.count).to eq(2)
   end
+
+  it 'finds total revenue for single merchant' do
+    merchant       = create(:merchant)
+    invoice_1      = create(:invoice, merchant: merchant)
+    invoice_2      = create(:invoice, merchant: merchant)
+    invoice_item_1 = create(:invoice_item, invoice: invoice_1, unit_price: 1000)
+    invoice_item_2 = create(:invoice_item, invoice: invoice_1, unit_price: 1500)
+    invoice_item_3 = create(:invoice_item, invoice: invoice_2, unit_price: 200)
+    invoice_item_4 = create(:invoice_item, invoice: invoice_2, unit_price: 300)
+    transaction_1  = create(:transaction, invoice: invoice_1, result: "failed")
+    transaction_2  = create(:transaction, invoice: invoice_1, result: "success")
+    transaction_3  = create(:transaction, invoice: invoice_2, result: "success")
+
+    get "/api/v1/merchants/#{merchant.id}/revenue"
+  end
 end
