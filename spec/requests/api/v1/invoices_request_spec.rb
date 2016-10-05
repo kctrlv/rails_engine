@@ -135,4 +135,13 @@ describe "Invoices CRUD API" do
     expect(raw_invoices.count).to eq(2)
     expect(raw_invoices[0]["status"]).to eq("pending")
   end
+
+  it 'omits timestamp data from json response' do
+    invoices = create_list(:invoice, 3)
+    get '/api/v1/invoices.json'
+    res = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(res.count).to eq(3)
+    expect(res.first.keys).to eq(['id', 'customer_id', 'merchant_id', 'status'])
+  end
 end
