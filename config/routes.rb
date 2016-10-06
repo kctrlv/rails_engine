@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   get '/api/v1/transactions/:id/invoice', to: 'api/v1/transactions/invoices#show'
 
   get '/api/v1/customers/:id/invoices', to: 'api/v1/customers/invoices#index'
+  get '/api/v1/customers/:id/transactions', to: 'api/v1/customers/transactions#index'
 
   namespace :api do
     namespace :v1 do

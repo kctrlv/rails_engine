@@ -156,9 +156,20 @@ describe "Customer Relationship Endpoints" do
     expect(raw_invoices.last['status']).to eq('pending')
   end
 
-  # it "returns a collection og associated transactions" do
-  #
-  # end
+  it "returns a collection of associated transactions" do
+    customer = create(:customer)
+    invoice  = create(:invoice, customer: customer)
+               create(:transaction, invoice: invoice, result: "failed")
+               create(:transaction, invoice: invoice, result: "success")
+    get "/api/v1/customers/#{customer.id}/transactions"
+
+    raw_transactions = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_transactions.count).to eq(2)
+    expect(raw_transactions.first['invoice_id']).to eq(invoice.id)
+    expect(raw_transactions.last['result']).to eq('success')
+  end
 end
 
 # describe 'Customers Intelligence' do
