@@ -237,13 +237,24 @@ describe "Invoices Relationships" do
     expect(raw_items.count).to eq(3)
     expect(raw_items.first['name']).to eq('Apple')
     expect(raw_items.last['name']).to eq('Cookie')
-    byebug
   end
 
-  # it 'returns the customer for the invoice' do
-  # end
-  #
-  # it 'returns the merchant for the invoice' do
-  # end
+  it 'returns the customer for the invoice' do
+    customer = create(:customer, first_name: "Jasmin")
+    invoice = create(:invoice, customer: customer)
+    get "/api/v1/invoices/#{invoice.id}/customer"
+    raw_customer = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(raw_customer['first_name']).to eq("Jasmin")
+  end
+
+  it 'returns the merchant for the invoice' do
+    merchant = create(:merchant, name: "David")
+    invoice = create(:invoice, merchant: merchant)
+    get "/api/v1/invoices/#{invoice.id}/merchant"
+    raw_merchant = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(raw_merchant['name']).to eq("David")
+  end
 
 end
