@@ -7,7 +7,7 @@ class Merchant < ApplicationRecord
   def revenue
     merchant_paid_invoice_items.map do |invoice_item|
       invoice_item['quantity'] * invoice_item['unit_price']
-    end.reduce(:+).to_f
+    end.reduce(:+)
   end
 
   def merchant_paid_invoice_items
