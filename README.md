@@ -1,24 +1,55 @@
-# README
+# Rails Engine
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A JSON API that exposes the [SalesEngine](https://github.com/turingschool/sales_engine/tree/master/data) data schema built with Rails and ActiveRecord.
 
-Things you may want to cover:
+## Getting Started
 
-* Ruby version
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-* System dependencies
+### Prerequisities
 
-* Configuration
+What things you need to install the software and how to install them
 
-* Database creation
+```
+Rails 5.0.0.1
+```
 
-* Database initialization
+### Installing
 
-* How to run the test suite
+A step by step series of examples that tell you have to get a development env running
 
-* Services (job queues, cache servers, search engines, etc.)
+Step 1 - clone down the project and cd into the directory:
 
-* Deployment instructions
+```
+git clone git@github.com:kctrlv/rails_engine.git
+cd rails_engine
+bundle
+```
 
-* ...
+Step 2 - clear your existing database (just in case):
+
+```
+rake import:rebuild
+```
+
+This is the same as performing `rake db:{drop,create,migrate}`.
+
+Step 3 - import the CSV data from SalesEngine:
+
+```
+rake import:all
+```
+
+## Running the tests
+
+Use `rspec` to run the test suite.
+
+## Authors
+
+* **David Davydov** ([kctrlv](https://github.com/kctrlv))
+* **Jasmin Hudacsek** ([j-sm-n](https://github.com/j-sm-n))
+
+## Acknowledgments
+
+* Hat tip to Black Thursday
+* Everything is Sal's fault
