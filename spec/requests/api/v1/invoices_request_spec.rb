@@ -188,6 +188,72 @@ describe "Invoices CRUD API" do
     expect(res.first['status']).to eq("success")
     expect(res.last['status']).to eq("success")
   end
+end
 
+describe "Invoices Relationships" do
+  it 'returns a list of transactions for the invoice' do
+    invoice = create(:invoice)
+              create(:transaction, invoice: invoice, result: 'failed')
+              create(:transaction, invoice: invoice, result: 'failed')
+              create(:transaction, invoice: invoice, result: 'success')
+    get "/api/v1/invoices/#{invoice.id}/transactions"
+    raw_transactions = JSON.parse(response.body)
 
+    expect(response).to be_success
+    expect(raw_transactions.count).to eq(3)
+    expect(raw_transactions.first['result']).to eq('failed')
+    expect(raw_transactions.last['result']).to eq('success')
+    expect(raw_transactions.first['invoice_id']).to eq(invoice.id)
+  end
+
+  it 'returns a list of invoice items for the invoice' do
+    invoice = create(:invoice)
+              create(:invoice_item, invoice: invoice, quantity: 3)
+              create(:invoice_item, invoice: invoice, quantity: 4)
+              create(:invoice_item, invoice: invoice, quantity: 5)
+    get "/api/v1/invoices/#{invoice.id}/invoice_items"
+    raw_invoice_items = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_invoice_items.count).to eq(3)
+    expect(raw_invoice_items.first['quantity']).to eq(3)
+    expect(raw_invoice_items.last['quantity']).to eq(5)
+    expect(raw_invoice_items.first['invoice_id']).to eq(invoice.id)
+  end
+
+  it 'returns a list of items for the invoice' do
+    invoice = create(:invoice)
+    item1 = create(:item, name: "Apple" )
+    item2 = create(:item, name: "Bandana" )
+    item3 = create(:item, name: "Cookie" )
+    create(:invoice_item, invoice: invoice, item: item1)
+    create(:invoice_item, invoice: invoice, item: item2)
+    create(:invoice_item, invoice: invoice, item: item3)
+
+    get "/api/v1/invoices/#{invoice.id}/items"
+    raw_items = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_items.count).to eq(3)
+    expect(raw_items.first['name']).to eq('Apple')
+    expect(raw_items.last['name']).to eq('Cookie')
+  end
+
+  it 'returns the customer for the invoice' do
+    customer = create(:customer, first_name: "Jasmin")
+    invoice = create(:invoice, customer: customer)
+    get "/api/v1/invoices/#{invoice.id}/customer"
+    raw_customer = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(raw_customer['first_name']).to eq("Jasmin")
+  end
+
+  it 'returns the merchant for the invoice' do
+    merchant = create(:merchant, name: "David")
+    invoice = create(:invoice, merchant: merchant)
+    get "/api/v1/invoices/#{invoice.id}/merchant"
+    raw_merchant = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(raw_merchant['name']).to eq("David")
+  end
 end

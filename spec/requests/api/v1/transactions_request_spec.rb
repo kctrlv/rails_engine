@@ -150,3 +150,16 @@ describe 'Transactions API' do
     expect(res.first.keys).to eq(['id', 'invoice_id', 'credit_card_number', 'result'])
   end
 end
+
+describe "Transactions Relationship Endpoints" do
+  it "returns the associated invoice" do
+    invoice     = create(:invoice)
+    transaction = create(:transaction, invoice: invoice)
+    get "/api/v1/transactions/#{transaction.id}/invoice"
+
+    raw_invoice = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_invoice['id']).to eq(invoice.id)
+  end
+end

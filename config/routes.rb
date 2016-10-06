@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   get '/api/v1/transactions/random', to: 'api/v1/transactions#random'
   get '/api/v1/customers/random', to: 'api/v1/customers#random'
 
-
   get '/api/v1/items/find', to: 'api/v1/items/search#show'
   get '/api/v1/items/find_all', to: 'api/v1/items/search#index'
 
@@ -23,6 +22,28 @@ Rails.application.routes.draw do
   get '/api/v1/merchants/find_all', to: 'api/v1/merchants/search#index'
   get '/api/v1/customers/find_all', to: 'api/v1/customers/search#index'
   get '/api/v1/transactions/find_all', to: 'api/v1/transactions/search#index'
+
+  get '/api/v1/merchants/:id/revenue', to: 'api/v1/merchants/single_merchant_revenue#show'
+  get '/api/v1/merchants/:id/items', to: 'api/v1/merchants/items#index'
+  get '/api/v1/merchants/:id/invoices', to: 'api/v1/merchants/invoices#index'
+
+  get '/api/v1/invoices/:id/transactions', to: 'api/v1/invoices/transactions#index'
+  get '/api/v1/invoices/:id/invoice_items', to: 'api/v1/invoices/invoice_items#index'
+  get '/api/v1/invoices/:id/items', to: 'api/v1/invoices/items#index'
+  get '/api/v1/invoices/:id/customer', to: 'api/v1/invoices/customer#show'
+  get '/api/v1/invoices/:id/merchant', to: 'api/v1/invoices/merchant#show'
+
+  get '/api/v1/invoice_items/:id/invoice', to: 'api/v1/invoice_items/invoice#show'
+  get '/api/v1/invoice_items/:id/item', to: 'api/v1/invoice_items/item#show'
+
+
+  get '/api/v1/items/:id/invoice_items', to: 'api/v1/items/invoice_items#index'
+  get '/api/v1/items/:id/merchant', to: 'api/v1/items/merchants#show'
+
+  get '/api/v1/transactions/:id/invoice', to: 'api/v1/transactions/invoices#show'
+
+  get '/api/v1/customers/:id/invoices', to: 'api/v1/customers/invoices#index'
+  get '/api/v1/customers/:id/transactions', to: 'api/v1/customers/transactions#index'
 
   namespace :api do
     namespace :v1 do
