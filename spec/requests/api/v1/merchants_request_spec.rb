@@ -155,5 +155,15 @@ describe "Merchants Relationships" do
   end
 
   it 'returns a list of invoices for the merchant' do
+    merchant = create(:merchant)
+    invoice1 = create(:invoice, merchant: merchant, status: "shipped")
+    invoice2 = create(:invoice, merchant: merchant, status: "pending")
+    get "/api/v1/merchants/#{merchant.id}/invoices"
+    raw_invoices = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(raw_invoices.count).to eq(2)
+    expect(raw_invoices.first['status']).to eq("shipped")
+    expect(raw_invoices.first['merchant_id']).to eq(merchant.id)
+    expect(raw_invoices.last['status']).to eq("pending")
   end
 end
