@@ -27,6 +27,9 @@ Rails.application.routes.draw do
   get '/api/v1/merchants/:id/items', to: 'api/v1/merchants/items#index'
   get '/api/v1/merchants/:id/invoices', to: 'api/v1/merchants/invoices#index'
 
+  get '/api/v1/invoices/:id/transactions', to: 'api/v1/invoices/transactions#index'
+  get '/api/v1/invoices/:id/invoice_items', to: 'api/v1/invoices/invoice_items#index'
+
 
 
   namespace :api do
