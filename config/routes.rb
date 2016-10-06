@@ -29,6 +29,13 @@ Rails.application.routes.draw do
 
   get '/api/v1/invoices/:id/transactions', to: 'api/v1/invoices/transactions#index'
   get '/api/v1/invoices/:id/invoice_items', to: 'api/v1/invoices/invoice_items#index'
+  get '/api/v1/invoices/:id/items', to: 'api/v1/invoices/items#index'
+  get '/api/v1/invoices/:id/customer', to: 'api/v1/invoices/customer#show'
+  get '/api/v1/invoices/:id/merchant', to: 'api/v1/invoices/merchant#show'
+
+  get '/api/v1/invoice_items/:id/invoice', to: 'api/v1/invoice_items/invoice#show'
+  get '/api/v1/invoice_items/:id/item', to: 'api/v1/invoice_items/item#show'
+
 
 
 
