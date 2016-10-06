@@ -256,5 +256,4 @@ describe "Invoices Relationships" do
     expect(response).to be_success
     expect(raw_merchant['name']).to eq("David")
   end
-
 end

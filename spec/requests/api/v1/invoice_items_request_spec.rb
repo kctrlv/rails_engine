@@ -155,3 +155,23 @@ describe "Invoice Items CRUD API" do
     expect(res.last['quantity']).to eq(30)
   end
 end
+
+describe "Invoice Items Relationships" do
+  it 'returns the invoice for the invoice item' do
+    invoice = create(:invoice, status: "shipped")
+    invoice_item = create(:invoice_item, invoice: invoice)
+    get "/api/v1/invoice_items/#{invoice_item.id}/invoice"
+    raw_invoice = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(raw_invoice['status']).to eq("shipped")
+  end
+
+  it 'returns the item for the invoice item' do
+    item = create(:item, name: "David")
+    invoice_item = create(:invoice_item, item: item)
+    get "/api/v1/invoice_items/#{invoice_item.id}/item"
+    raw_item = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(raw_item['name']).to eq("David")
+  end
+end
