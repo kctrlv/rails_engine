@@ -173,7 +173,14 @@ describe "Items Relationship Endpoints" do
     expect(raw_invoice_items.last['quantity']).to eq(2)
   end
 
-  # it "returns single merchant for single item" do
-  #
-  # end
+  it "returns single merchant for single item" do
+    merchant = create(:merchant)
+    item = create(:item, merchant: merchant)
+    get "/api/v1/items/#{item.id}/merchant"
+
+    raw_merchant = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_merchant["id"]).to eq(merchant.id)
+  end
 end
