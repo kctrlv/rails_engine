@@ -139,3 +139,10 @@ describe 'Customers API' do
     expect(res.first.keys).to eq(['id', 'first_name', 'last_name'])
   end
 end
+
+# describe 'Customers Intelligence' do
+#   it 'knows a customers favorite merchant' do
+#     customer = create(:customer)
+#
+#   end
+# end

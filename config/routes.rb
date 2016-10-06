@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   get '/api/v1/transactions/find_all', to: 'api/v1/transactions/search#index'
 
   get '/api/v1/merchants/:id/revenue', to: 'api/v1/merchants/single_merchant_revenue#show'
+  get '/api/v1/merchants/:id/items', to: 'api/v1/merchants/items#index'
+
 
   namespace :api do
     namespace :v1 do

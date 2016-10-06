@@ -120,22 +120,40 @@ describe 'Merchants API' do
     expect(res.first.keys).to eq(['id', 'name'])
   end
 
-  xit 'finds total revenue for single merchant' do
-    merchant       = create(:merchant)
-    invoice_1      = create(:invoice, merchant: merchant)
-    invoice_2      = create(:invoice, merchant: merchant)
-    invoice_item_1 = create(:invoice_item, invoice: invoice_1, quantity: 1, unit_price: 1000)
-    invoice_item_2 = create(:invoice_item, invoice: invoice_1, quantity: 1, unit_price: 1500)
-    invoice_item_3 = create(:invoice_item, invoice: invoice_2, quantity: 2, unit_price: 200)
-    invoice_item_4 = create(:invoice_item, invoice: invoice_2, quantity: 2, unit_price: 300)
-    transaction_1  = create(:transaction, invoice: invoice_1, result: "failed")
-    transaction_2  = create(:transaction, invoice: invoice_1, result: "success")
+  # xit 'finds total revenue for single merchant' do
+  #   merchant       = create(:merchant)
+  #   invoice_1      = create(:invoice, merchant: merchant)
+  #   invoice_2      = create(:invoice, merchant: merchant)
+  #   invoice_item_1 = create(:invoice_item, invoice: invoice_1, quantity: 1, unit_price: 1000)
+  #   invoice_item_2 = create(:invoice_item, invoice: invoice_1, quantity: 1, unit_price: 1500)
+  #   invoice_item_3 = create(:invoice_item, invoice: invoice_2, quantity: 2, unit_price: 200)
+  #   invoice_item_4 = create(:invoice_item, invoice: invoice_2, quantity: 2, unit_price: 300)
+  #   transaction_1  = create(:transaction, invoice: invoice_1, result: "failed")
+  #   transaction_2  = create(:transaction, invoice: invoice_1, result: "success")
+  #
+  #   get "/api/v1/merchants/#{merchant.id}/revenue"
+  #   # byebug
+  #   revenue = JSON.parse(response.body)
+  #
+  #   expect(response).to be_success
+  #   expect(revenue['revenue']).to eq("3500.00")
+  # end
+end
 
-    get "/api/v1/merchants/#{merchant.id}/revenue"
-    # byebug
-    revenue = JSON.parse(response.body)
-
+describe "Merchants Relationships" do
+  it 'returns a list of items for the merchant' do
+    merchant = create(:merchant)
+    item1 = create(:item, merchant: merchant, name: "Apple")
+    item2 = create(:item, merchant: merchant, name: "Bin")
+    item3 = create(:item, merchant: merchant, name: "Candy")
+    get "/api/v1/merchants/#{merchant.id}/items"
+    raw_items = JSON.parse(response.body)
     expect(response).to be_success
-    expect(revenue['revenue']).to eq("3500.00")
+    expect(raw_items.count).to eq(3)
+    expect(raw_items.first['name']).to eq("Apple")
+    expect(raw_items.first['merchant_id']).to eq(merchant.id)
+  end
+
+  it 'returns a list of invoices for the merchant' do
   end
 end
