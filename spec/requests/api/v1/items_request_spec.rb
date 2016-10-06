@@ -156,3 +156,31 @@ describe "Items CRUD API" do
     expect(res.last['name']).to eq("Carla")
   end
 end
+
+describe "Items Relationship Endpoints" do
+  it "returns all invoice items associated with a single item" do
+    item = create(:item)
+           create(:invoice_item, item: item, quantity: 10)
+           create(:invoice_item, item: item, quantity: 1)
+           create(:invoice_item, item: item, quantity: 2)
+    get "/api/v1/items/#{item.id}/invoice_items"
+
+    raw_invoice_items = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_invoice_items.count).to eq(3)
+    expect(raw_invoice_items.first['quantity']).to eq(10)
+    expect(raw_invoice_items.last['quantity']).to eq(2)
+  end
+
+  it "returns single merchant for single item" do
+    merchant = create(:merchant)
+    item = create(:item, merchant: merchant)
+    get "/api/v1/items/#{item.id}/merchant"
+
+    raw_merchant = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_merchant["id"]).to eq(merchant.id)
+  end
+end
