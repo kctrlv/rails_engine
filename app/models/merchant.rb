@@ -15,4 +15,15 @@ class Merchant < ApplicationRecord
   def customers_with_transactions
     customers.joins("join transactions on transactions.invoice_id = invoices.id")
   end
+
+  def favorite_customers
+    customers.joins(:transactions)
+             .merge(Transaction.successful)
+             .group(:id)
+             .order("transactions.count DESC")
+  end
+
+  def favorite_customer
+    favorite_customers.take
+  end
 end

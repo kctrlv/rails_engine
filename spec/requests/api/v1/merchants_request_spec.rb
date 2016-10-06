@@ -184,4 +184,22 @@ describe "Merchants Business Intelligence" do
     expect(raw_customers.count).to eq(1)
     expect(raw_customers.first['first_name']).to eq("Steve")
   end
+
+  it 'returns favorite customer for a merchant' do
+    merchant = create(:merchant)
+    customer1 = create(:customer, first_name: "Mary")
+    customer2 = create(:customer, first_name: "Steve")
+    invoice1 = create(:invoice, customer: customer1, merchant: merchant)
+    invoice2 = create(:invoice, customer: customer2, merchant: merchant)
+    tx1 = create(:transaction, invoice: invoice1, result: "success")
+    tx2 = create(:transaction, invoice: invoice1, result: "success")
+    tx3 = create(:transaction, invoice: invoice1, result: "failed")
+    tx4 = create(:transaction, invoice: invoice2, result: "success")
+    tx5 = create(:transaction, invoice: invoice2, result: "failed")
+    get "/api/v1/merchants/#{merchant.id}/favorite_customer"
+    raw_customer = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(raw_customer['first_name']).to eq('Mary')
+  end
+
 end
