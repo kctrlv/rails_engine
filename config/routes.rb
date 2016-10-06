@@ -47,6 +47,7 @@ Rails.application.routes.draw do
 
   get "/api/v1/merchants/:id/customers_with_pending_invoices", to: 'api/v1/merchants/customers_with_pending_invoices#index'
   get "/api/v1/merchants/:id/favorite_customer", to: 'api/v1/merchants/favorite_customer#show'
+  get "/api/v1/customers/:id/favorite_merchant", to: 'api/v1/customers/favorite_merchant#show'
 
   namespace :api do
     namespace :v1 do
