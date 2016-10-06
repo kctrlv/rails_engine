@@ -140,6 +140,27 @@ describe 'Customers API' do
   end
 end
 
+describe "Customer Relationship Endpoints" do
+  it "returns a collection of associated invoices" do
+    customer = create(:customer)
+               create(:invoice, customer: customer, status: 'shipped')
+               create(:invoice, customer: customer, status: 'shipped')
+               create(:invoice, customer: customer, status: 'pending')
+    get "/api/v1/customers/#{customer.id}/invoices"
+
+    raw_invoices = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_invoices.count).to eq(3)
+    expect(raw_invoices.first['status']).to eq('shipped')
+    expect(raw_invoices.last['status']).to eq('pending')
+  end
+
+  # it "returns a collection og associated transactions" do
+  #
+  # end
+end
+
 # describe 'Customers Intelligence' do
 #   it 'knows a customers favorite merchant' do
 #     customer = create(:customer)
