@@ -9,6 +9,8 @@ RSpec.describe Invoice, type: :model do
 
   it { should have_many(:invoice_items) }
 
+  it { should have_many(:items)}
+
   it "should calculate its own total revenue when paid in full" do
     invoice = create(:invoice)
               create(:invoice_item, invoice: invoice, quantity: 10, unit_price: 10.00)

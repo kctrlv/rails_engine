@@ -220,10 +220,26 @@ describe "Invoices Relationships" do
     expect(raw_invoice_items.last['quantity']).to eq(5)
     expect(raw_invoice_items.first['invoice_id']).to eq(invoice.id)
   end
-  #
-  # it 'returns a list of items for the invoice' do
-  # end
-  #
+
+  it 'returns a list of items for the invoice' do
+    invoice = create(:invoice)
+    item1 = create(:item, name: "Apple" )
+    item2 = create(:item, name: "Bandana" )
+    item3 = create(:item, name: "Cookie" )
+    create(:invoice_item, invoice: invoice, item: item1)
+    create(:invoice_item, invoice: invoice, item: item2)
+    create(:invoice_item, invoice: invoice, item: item3)
+
+    get "/api/v1/invoices/#{invoice.id}/items"
+    raw_items = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_items.count).to eq(3)
+    expect(raw_items.first['name']).to eq('Apple')
+    expect(raw_items.last['name']).to eq('Cookie')
+    byebug
+  end
+
   # it 'returns the customer for the invoice' do
   # end
   #
