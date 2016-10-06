@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   get '/api/v1/items/:id/invoice_items', to: 'api/v1/items/invoice_items#index'
   get '/api/v1/items/:id/merchant', to: 'api/v1/items/merchants#show'
 
+  get '/api/v1/transactions/:id/invoice', to: 'api/v1/transactions/invoices#show'
+
   namespace :api do
     namespace :v1 do
       resources :items, only: [:index, :show]
