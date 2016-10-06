@@ -167,3 +167,21 @@ describe "Merchants Relationships" do
     expect(raw_invoices.last['status']).to eq("pending")
   end
 end
+
+describe "Merchants Business Intelligence" do
+  it 'returns customers with pending invoices for a merchant' do
+    merchant = create(:merchant)
+    customer1 = create(:customer, first_name: "Mary")
+    customer2 = create(:customer, first_name: "Steve")
+    customer3 = create(:customer, first_name: "Bob")
+    invoice1 = create(:invoice, customer: customer1, merchant: merchant)
+    invoice2 = create(:invoice, customer: customer2, merchant: merchant)
+    tx1 = create(:transaction, invoice: invoice1, result: "success")
+    tx2 = create(:transaction, invoice: invoice2, result: "failed")
+    get "/api/v1/merchants/#{merchant.id}/customers_with_pending_invoices"
+    raw_customers = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(raw_customers.count).to eq(1)
+    expect(raw_customers.first['first_name']).to eq("Steve")
+  end
+end
