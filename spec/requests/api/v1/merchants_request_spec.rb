@@ -190,4 +190,8 @@ describe "Single Merchant Business Intelligence" do
     expect(raw_customers.count).to eq(1)
     expect(raw_customers.first['first_name']).to eq("Steve")
   end
+
+  it 'returns the total revenue for merchant by invoice date' do
+    
+  end
 end
