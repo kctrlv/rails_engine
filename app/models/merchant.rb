@@ -50,13 +50,14 @@ class Merchant < ApplicationRecord
   end
 
   def favorite_customers
-    customers.joins(:transactions)
-             .merge(Transaction.successful)
-             .group(:id)
-             .order("transactions.count DESC")
+    customers.joins(:transactions).merge(Transaction.successful).group(:id)
+  end
+
+  def sorted_favorite_customers
+    favorite_customers.order("transactions.count DESC")
   end
 
   def favorite_customer
-    favorite_customers.take
+    sorted_favorite_customers.take
   end
 end

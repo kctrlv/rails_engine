@@ -187,14 +187,67 @@ end
 
 describe "Items Business Intelligence" do
   it 'returns top x items ranked by total revenue generated' do
-    item1 = 
+    i1 = create(:item, name: 'Axe')
+    i2 = create(:item, name: 'Bat')
+    i3 = create(:item, name: 'Cat')
+    i4 = create(:item, name: 'Dog')
+    i5 = create(:item, name: 'Egg')
+
+    inv1 = create(:invoice)
+    inv2 = create(:invoice)
+    inv3 = create(:invoice)
+
+    create(:invoice_item, item: i1, invoice: inv1, quantity: 1, unit_price: 100 )
+    create(:invoice_item, item: i2, invoice: inv1, quantity: 2, unit_price: 40 )
+    create(:invoice_item, item: i3, invoice: inv2, quantity: 3, unit_price: 20 )
+    create(:invoice_item, item: i4, invoice: inv3, quantity: 4, unit_price: 10 )
+    create(:invoice_item, item: i5, invoice: inv3, quantity: 5, unit_price: 5 )
+
+    create(:transaction, invoice: inv1, result: 'success')
+    create(:transaction, invoice: inv2, result: 'success')
+    create(:transaction, invoice: inv3, result: 'success')
+
     get "/api/v1/items/most_revenue?quantity=5"
     raw_items = JSON.parse(response.body)
     expect(raw_items.count).to eq(5)
+    expect(raw_items.first['name']).to eq("Axe")
 
+    get "/api/v1/items/most_revenue?quantity=2"
+    raw_items = JSON.parse(response.body)
+    expect(raw_items.count).to eq(2)
+    expect(raw_items.last['name']).to eq("Bat")
   end
 
   it 'returns top x items ranked by total number sold' do
+    i1 = create(:item, name: 'Axe')
+    i2 = create(:item, name: 'Bat')
+    i3 = create(:item, name: 'Cat')
+    i4 = create(:item, name: 'Dog')
+    i5 = create(:item, name: 'Egg')
+
+    inv1 = create(:invoice)
+    inv2 = create(:invoice)
+    inv3 = create(:invoice)
+
+    create(:invoice_item, item: i1, invoice: inv1, quantity: 1, unit_price: 10 )
+    create(:invoice_item, item: i2, invoice: inv1, quantity: 2, unit_price: 8 )
+    create(:invoice_item, item: i3, invoice: inv2, quantity: 3, unit_price: 6 )
+    create(:invoice_item, item: i4, invoice: inv3, quantity: 4, unit_price: 4 )
+    create(:invoice_item, item: i5, invoice: inv3, quantity: 5, unit_price: 2 )
+
+    create(:transaction, invoice: inv1, result: 'success')
+    create(:transaction, invoice: inv2, result: 'success')
+    create(:transaction, invoice: inv3, result: 'success')
+
+    get "/api/v1/items/most_items?quantity=5"
+    raw_items = JSON.parse(response.body)
+    expect(raw_items.count).to eq(5)
+    expect(raw_items.first['name']).to eq("Egg")
+
+    get "/api/v1/items/most_items?quantity=2"
+    raw_items = JSON.parse(response.body)
+    expect(raw_items.count).to eq(2)
+    expect(raw_items.last['name']).to eq("Dog")
   end
 
   it 'returns the date with most sales for an item by invoice date' do
