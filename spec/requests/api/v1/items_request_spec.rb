@@ -184,3 +184,19 @@ describe "Items Relationship Endpoints" do
     expect(raw_merchant["id"]).to eq(merchant.id)
   end
 end
+
+describe "Items Business Intelligence" do
+  it 'returns top x items ranked by total revenue generated' do
+    item1 = 
+    get "/api/v1/items/most_revenue?quantity=5"
+    raw_items = JSON.parse(response.body)
+    expect(raw_items.count).to eq(5)
+
+  end
+
+  it 'returns top x items ranked by total number sold' do
+  end
+
+  it 'returns the date with most sales for an item by invoice date' do
+  end
+end
