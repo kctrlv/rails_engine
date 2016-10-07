@@ -23,8 +23,8 @@ class Merchant < ApplicationRecord
   end
 
   def paid_invoices_by_date(invoice_date)
-    invoices_by_date(invoice_date).joins(:transactions).
-                                   where(transactions: { result: 'success' })
+    invoices_by_date(invoice_date).joins(:transactions)
+                                  .where(transactions: { result: 'success' })
   end
 
   def invoices_by_date(invoice_date)
@@ -50,13 +50,21 @@ class Merchant < ApplicationRecord
   end
 
   def favorite_customers
-    customers.joins(:transactions)
-             .merge(Transaction.successful)
-             .group(:id)
-             .order("transactions.count DESC")
+    customers.joins(:transactions).merge(Transaction.successful).group(:id)
+  end
+
+  def sorted_favorite_customers
+    favorite_customers.order("transactions.count DESC")
   end
 
   def favorite_customer
-    favorite_customers.take
+    sorted_favorite_customers.take
+  end
+
+  def self.total_revenue_by_date(date)
+    joins(invoices: [:invoice_items, :transactions])
+      .where(invoices: { created_at: date },
+             transactions: { result: 'success' })
+             .sum("invoice_items.unit_price * invoice_items.quantity")
   end
 end
