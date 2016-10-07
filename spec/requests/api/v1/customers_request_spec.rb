@@ -172,9 +172,27 @@ describe "Customer Relationship Endpoints" do
   end
 end
 
-# describe 'Customers Intelligence' do
-#   it 'knows a customers favorite merchant' do
-#     customer = create(:customer)
-#
-#   end
-# end
+describe 'Customers Intelligence' do
+  it 'knows a customers favorite merchant' do
+    customer = create(:customer)
+    merchant1 = create(:merchant, name: 'Bobby')
+    merchant2 = create(:merchant, name: 'Coolio')
+    merchant3 = create(:merchant, name: 'Seth')
+    invoice1 = create(:invoice, customer: customer, merchant: merchant1)
+    invoice2 = create(:invoice, customer: customer, merchant: merchant2)
+    invoice3 = create(:invoice, customer: customer, merchant: merchant3)
+
+    tx1 = create(:transaction, invoice: invoice1, result: "failed")
+    tx2 = create(:transaction, invoice: invoice1, result: "success")
+    tx3 = create(:transaction, invoice: invoice1, result: "success")
+    tx4 = create(:transaction, invoice: invoice2, result: "success")
+    tx5 = create(:transaction, invoice: invoice2, result: "success")
+    tx6 = create(:transaction, invoice: invoice2, result: "success")
+
+    get "/api/v1/customers/#{customer.id}/favorite_merchant"
+    raw_merchant = JSON.parse(response.body)
+    expect(response).to be_success
+    expect(raw_merchant['name']).to eq('Coolio')
+
+  end
+end
