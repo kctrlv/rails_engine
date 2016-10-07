@@ -5,7 +5,19 @@ class Merchant < ApplicationRecord
   has_many :customers, through: :invoices
 
   def revenue
-    invoices.map { |invoice| invoice.total }.sum
+    merchant_paid_invoice_items.map do |invoice_item|
+      invoice_item['quantity'] * invoice_item['unit_price']
+    end.reduce(:+)
+  end
+
+  def merchant_paid_invoice_items
+    paid_invoices.map do |invoice|
+      InvoiceItem.where(invoice_id: invoice)
+    end.flatten
+  end
+
+  def paid_invoices
+    invoices.joins(:transactions).where(transactions: { result: 'success' })
   end
 
   def customers_with_pending_invoices

@@ -119,25 +119,6 @@ describe 'Merchants API' do
     expect(res.count).to eq(3)
     expect(res.first.keys).to eq(['id', 'name'])
   end
-
-  # xit 'finds total revenue for single merchant' do
-  #   merchant       = create(:merchant)
-  #   invoice_1      = create(:invoice, merchant: merchant)
-  #   invoice_2      = create(:invoice, merchant: merchant)
-  #   invoice_item_1 = create(:invoice_item, invoice: invoice_1, quantity: 1, unit_price: 1000)
-  #   invoice_item_2 = create(:invoice_item, invoice: invoice_1, quantity: 1, unit_price: 1500)
-  #   invoice_item_3 = create(:invoice_item, invoice: invoice_2, quantity: 2, unit_price: 200)
-  #   invoice_item_4 = create(:invoice_item, invoice: invoice_2, quantity: 2, unit_price: 300)
-  #   transaction_1  = create(:transaction, invoice: invoice_1, result: "failed")
-  #   transaction_2  = create(:transaction, invoice: invoice_1, result: "success")
-  #
-  #   get "/api/v1/merchants/#{merchant.id}/revenue"
-  #   # byebug
-  #   revenue = JSON.parse(response.body)
-  #
-  #   expect(response).to be_success
-  #   expect(revenue['revenue']).to eq("3500.00")
-  # end
 end
 
 describe "Merchants Relationships" do
@@ -168,7 +149,32 @@ describe "Merchants Relationships" do
   end
 end
 
-describe "Merchants Business Intelligence" do
+describe "Single Merchant Business Intelligence" do
+  it 'finds total revenue for single merchant' do
+    merchant       = create(:merchant)
+
+    invoice_1      = create(:invoice, merchant: merchant)
+    invoice_2      = create(:invoice, merchant: merchant)
+    failed_invoice = create(:invoice, merchant: merchant)
+
+    invoice_item_1 = create(:invoice_item, invoice: invoice_1, quantity: 1, unit_price: 100.75)
+    invoice_item_2 = create(:invoice_item, invoice: invoice_1, quantity: 1, unit_price: 150.50)
+    invoice_item_3 = create(:invoice_item, invoice: invoice_2, quantity: 2, unit_price: 20.00)
+    invoice_item_4 = create(:invoice_item, invoice: invoice_2, quantity: 2, unit_price: 30.00)
+    invoice_item_5 = create(:invoice_item, invoice: failed_invoice, quantity: 1, unit_price: 500.99)
+
+    create(:transaction, invoice: invoice_1, result: "failed")
+    create(:transaction, invoice: invoice_1, result: "success")
+    create(:transaction, invoice: invoice_2, result: "success")
+    create(:transaction, invoice: failed_invoice, result: "failed")
+
+    get "/api/v1/merchants/#{merchant.id}/revenue"
+    revenue = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(revenue['revenue']).to eq("351.25")
+  end
+
   it 'returns customers with pending invoices for a merchant' do
     merchant = create(:merchant)
     customer1 = create(:customer, first_name: "Mary")
