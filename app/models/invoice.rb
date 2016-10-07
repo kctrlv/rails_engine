@@ -7,14 +7,4 @@ class Invoice < ApplicationRecord
   has_many :items, through: :invoice_items
 
   scope :successful, -> { joins(:transactions).where(transactions: {result: 'success'}) }
-
-  def total
-    invoice_items.map do |invoice_item|
-      invoice_item.total
-    end.reduce(:+) #if paid_in_full?
-  end
-
-  def paid_in_full?
-    transactions.exists?(result: "success")
-  end
 end

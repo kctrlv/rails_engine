@@ -38,16 +38,16 @@ Rails.application.routes.draw do
 
       resources :merchants, only: [:index, :show] do
         collection do
-          get 'random',                 to: 'merchants#random'
-          get 'find',                   to: 'merchants/search#show'
-          get 'find_all',               to: 'merchants/search#index'
-          get ':id/revenue',            to: 'merchants/single_merchant_revenue#show'
-          get ':id/items',              to: 'merchants/items#index'
-          get ':id/invoices',           to: 'merchants/invoices#index'
+          get 'random',                              to: 'merchants#random'
+          get 'find',                                to: 'merchants/search#show'
+          get 'find_all',                            to: 'merchants/search#index'
+          get 'revenue',                             to: 'merchants/revenue#show'
+          get ':id/revenue',                         to: 'merchants/single_merchant_revenue#show'
+          get ':id/items',                           to: 'merchants/items#index'
+          get ':id/invoices',                        to: 'merchants/invoices#index'
           get ":id/customers_with_pending_invoices", to: 'merchants/customers_with_pending_invoices#index'
-          get ":id/favorite_customer",  to: 'merchants/favorite_customer#show'
-          get ':id/revenue',            to: 'merchants/single_merchant_revenue#show'
-
+          get ":id/favorite_customer",               to: 'merchants/favorite_customer#show'
+          get ':id/revenue',                         to: 'merchants/single_merchant_revenue#show'
         end
       end
 

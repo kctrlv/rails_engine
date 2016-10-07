@@ -184,8 +184,11 @@ describe "Single Merchant Business Intelligence" do
     invoice2 = create(:invoice, customer: customer2, merchant: merchant)
     tx1 = create(:transaction, invoice: invoice1, result: "success")
     tx2 = create(:transaction, invoice: invoice2, result: "failed")
+
     get "/api/v1/merchants/#{merchant.id}/customers_with_pending_invoices"
+
     raw_customers = JSON.parse(response.body)
+
     expect(response).to be_success
     expect(raw_customers.count).to eq(1)
     expect(raw_customers.first['first_name']).to eq("Steve")
@@ -202,8 +205,11 @@ describe "Single Merchant Business Intelligence" do
     tx3 = create(:transaction, invoice: invoice1, result: "failed")
     tx4 = create(:transaction, invoice: invoice2, result: "success")
     tx5 = create(:transaction, invoice: invoice2, result: "failed")
+
     get "/api/v1/merchants/#{merchant.id}/favorite_customer"
+
     raw_customer = JSON.parse(response.body)
+
     expect(response).to be_success
     expect(raw_customer['first_name']).to eq('Mary')
   end
@@ -225,5 +231,32 @@ describe "Single Merchant Business Intelligence" do
 
     expect(response).to be_success
     expect(revenue['revenue']).to eq("100.75")
+  end
+
+  it 'returns the total revenue for date x across all merchants' do
+    merchant_1 = create(:merchant)
+    merchant_2 = create(:merchant)
+    merchant_3 = create(:merchant)
+
+    invoice_1 = create(:invoice, merchant: merchant_1, created_at: "2012-03-16 11:55:05")
+    invoice_2 = create(:invoice, merchant: merchant_2, created_at: "2012-03-07 10:54:55")
+    invoice_3 = create(:invoice, merchant: merchant_3, created_at: "2012-03-16 11:55:05")
+
+    invoice_item_1 = create(:invoice_item, invoice: invoice_1, quantity: 1, unit_price: 100.75)
+    invoice_item_2 = create(:invoice_item, invoice: invoice_2, quantity: 2, unit_price: 20.00)
+    invoice_item_3 = create(:invoice_item, invoice: invoice_3, quantity: 2, unit_price: 20.00)
+
+    create(:transaction, invoice: invoice_1, result: "success")
+    create(:transaction, invoice: invoice_2, result: "success")
+    create(:transaction, invoice: invoice_3, result: "success")
+
+    search_date = "2012-03-16 11:55:05"
+
+    get "/api/v1/merchants/revenue?date=#{search_date}"
+
+    raw_revenue = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(raw_revenue['total_revenue']).to eq('140.75')
   end
 end
