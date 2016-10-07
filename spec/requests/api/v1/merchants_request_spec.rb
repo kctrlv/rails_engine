@@ -259,4 +259,80 @@ describe "Single Merchant Business Intelligence" do
     expect(response).to be_success
     expect(raw_revenue['total_revenue']).to eq('140.75')
   end
+
+  it 'returns top x merchants ranked by total revenue generated' do
+    m1 = create(:merchant, name: 'Axe')
+    m2 = create(:merchant, name: 'Bat')
+    m3 = create(:merchant, name: 'Cat')
+    m4 = create(:merchant, name: 'Dog')
+    m5 = create(:merchant, name: 'Egg')
+
+    inv1 = create(:invoice, merchant: m1)
+    inv2 = create(:invoice, merchant: m2)
+    inv3 = create(:invoice, merchant: m3)
+    inv4 = create(:invoice, merchant: m4)
+    inv5 = create(:invoice, merchant: m5)
+
+    item = create(:item)
+
+    create(:invoice_item, invoice: inv1, item: item, quantity: 1, unit_price: 100 )
+    create(:invoice_item, invoice: inv2, item: item, quantity: 2, unit_price: 40 )
+    create(:invoice_item, invoice: inv3, item: item, quantity: 3, unit_price: 20 )
+    create(:invoice_item, invoice: inv4, item: item, quantity: 4, unit_price: 10 )
+    create(:invoice_item, invoice: inv5, item: item, quantity: 5, unit_price: 5 )
+
+    create(:transaction, invoice: inv1, result: 'success')
+    create(:transaction, invoice: inv2, result: 'success')
+    create(:transaction, invoice: inv3, result: 'success')
+    create(:transaction, invoice: inv4, result: 'success')
+    create(:transaction, invoice: inv5, result: 'success')
+
+    get "/api/v1/merchants/most_revenue?quantity=5"
+    raw_mercs = JSON.parse(response.body)
+    expect(raw_mercs.count).to eq(5)
+    expect(raw_mercs.first['name']).to eq("Axe")
+
+    get "/api/v1/merchants/most_revenue?quantity=2"
+    raw_mercs = JSON.parse(response.body)
+    expect(raw_mercs.count).to eq(2)
+    expect(raw_mercs.last['name']).to eq("Bat")
+  end
+
+  it 'returns top x merchants ranked by total number sold' do
+    m1 = create(:merchant, name: 'Axe')
+    m2 = create(:merchant, name: 'Bat')
+    m3 = create(:merchant, name: 'Cat')
+    m4 = create(:merchant, name: 'Dog')
+    m5 = create(:merchant, name: 'Egg')
+
+    inv1 = create(:invoice, merchant: m1)
+    inv2 = create(:invoice, merchant: m2)
+    inv3 = create(:invoice, merchant: m3)
+    inv4 = create(:invoice, merchant: m4)
+    inv5 = create(:invoice, merchant: m5)
+
+    item = create(:item)
+
+    create(:invoice_item, invoice: inv1, item: item, quantity: 1, unit_price: 100 )
+    create(:invoice_item, invoice: inv2, item: item, quantity: 2, unit_price: 40 )
+    create(:invoice_item, invoice: inv3, item: item, quantity: 3, unit_price: 20 )
+    create(:invoice_item, invoice: inv4, item: item, quantity: 4, unit_price: 10 )
+    create(:invoice_item, invoice: inv5, item: item, quantity: 5, unit_price: 5 )
+
+    create(:transaction, invoice: inv1, result: 'success')
+    create(:transaction, invoice: inv2, result: 'success')
+    create(:transaction, invoice: inv3, result: 'success')
+    create(:transaction, invoice: inv4, result: 'success')
+    create(:transaction, invoice: inv5, result: 'success')
+
+    get "/api/v1/merchants/most_items?quantity=5"
+    raw_mercs = JSON.parse(response.body)
+    expect(raw_mercs.count).to eq(5)
+    expect(raw_mercs.first['name']).to eq("Egg")
+
+    get "/api/v1/merchants/most_items?quantity=2"
+    raw_mercs = JSON.parse(response.body)
+    expect(raw_mercs.count).to eq(2)
+    expect(raw_mercs.last['name']).to eq("Dog")
+  end
 end

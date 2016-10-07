@@ -1,6 +1,7 @@
 class Merchant < ApplicationRecord
   has_many :invoices
   has_many :items
+  has_many :invoice_items, through: :invoices
   has_many :transactions, through: :invoices
   has_many :customers, through: :invoices
 
@@ -66,5 +67,25 @@ class Merchant < ApplicationRecord
       .where(invoices: { created_at: date },
              transactions: { result: 'success' })
              .sum("invoice_items.unit_price * invoice_items.quantity")
+  end
+
+  def self.merchants_by_invoice_items
+    Merchant.joins(:invoice_items).merge(Invoice.successful).group(:id)
+  end
+
+  def self.sorted_merchants_by_revenue
+    merchants_by_invoice_items.order('sum(invoice_items.quantity * invoice_items.unit_price) DESC')
+  end
+
+  def self.sorted_merchants_by_most_sold
+    merchants_by_invoice_items.order('sum(invoice_items.quantity) DESC')
+  end
+
+  def self.top_items_by_revenue(x)
+    sorted_merchants_by_revenue.take(x)
+  end
+
+  def self.top_items_sold(x)
+    sorted_merchants_by_most_sold.take(x)
   end
 end
