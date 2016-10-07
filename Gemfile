@@ -13,7 +13,8 @@ gem 'puma', '~> 3.0'
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
+gem 'active_model_serializers', '~> 0.10.0'
+gem 'simplecov', :require => false, :group => :test
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -26,10 +27,15 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'factory_girl_rails'
   gem 'rspec-rails'
+  gem 'awesome_print'
 end
 
 group :development do
   gem 'listen', '~> 3.0.5'
+end
+
+group :test do
+  gem 'shoulda-matchers', '~> 3.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
