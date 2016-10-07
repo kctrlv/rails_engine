@@ -10,6 +10,27 @@ class Merchant < ApplicationRecord
     end.reduce(:+)
   end
 
+  def revenue_by_date(invoice_date)
+    paid_invoice_items_by_date(invoice_date).map do |invoice_item|
+      invoice_item['quantity'] * invoice_item['unit_price']
+    end.reduce(:+)
+  end
+
+  def paid_invoice_items_by_date(invoice_date)
+    paid_invoices_by_date(invoice_date).map do |invoice|
+      InvoiceItem.where(invoice_id: invoice)
+    end.flatten
+  end
+
+  def paid_invoices_by_date(invoice_date)
+    invoices_by_date(invoice_date).joins(:transactions).
+                                   where(transactions: { result: 'success' })
+  end
+
+  def invoices_by_date(invoice_date)
+    invoices.where(created_at: invoice_date)
+  end
+
   def merchant_paid_invoice_items
     paid_invoices.map do |invoice|
       InvoiceItem.where(invoice_id: invoice)

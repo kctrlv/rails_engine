@@ -23,7 +23,9 @@ Rails.application.routes.draw do
   get '/api/v1/customers/find_all', to: 'api/v1/customers/search#index'
   get '/api/v1/transactions/find_all', to: 'api/v1/transactions/search#index'
 
+  # get '/api/v1/merchants/:id/revenue?date', to: 'api/v1/merchants/single_merchant_date_revenue#show'
   get '/api/v1/merchants/:id/revenue', to: 'api/v1/merchants/single_merchant_revenue#show'
+
   get '/api/v1/merchants/:id/items', to: 'api/v1/merchants/items#index'
   get '/api/v1/merchants/:id/invoices', to: 'api/v1/merchants/invoices#index'
 
@@ -36,7 +38,6 @@ Rails.application.routes.draw do
   get '/api/v1/invoice_items/:id/invoice', to: 'api/v1/invoice_items/invoice#show'
   get '/api/v1/invoice_items/:id/item', to: 'api/v1/invoice_items/item#show'
 
-
   get '/api/v1/items/:id/invoice_items', to: 'api/v1/items/invoice_items#index'
   get '/api/v1/items/:id/merchant', to: 'api/v1/items/merchants#show'
 
@@ -46,7 +47,6 @@ Rails.application.routes.draw do
   get '/api/v1/customers/:id/transactions', to: 'api/v1/customers/transactions#index'
 
   get "/api/v1/merchants/:id/customers_with_pending_invoices", to: 'api/v1/merchants/customers_with_pending_invoices#index'
-
 
   namespace :api do
     namespace :v1 do

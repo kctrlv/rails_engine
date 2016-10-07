@@ -192,6 +192,21 @@ describe "Single Merchant Business Intelligence" do
   end
 
   it 'returns the total revenue for merchant by invoice date' do
-    
+    merchant       = create(:merchant)
+
+    invoice_1      = create(:invoice, merchant: merchant, created_at: "2012-03-16 11:55:05")
+    invoice_2      = create(:invoice, merchant: merchant, created_at: "2012-03-07 10:54:55")
+
+    invoice_item_1 = create(:invoice_item, invoice: invoice_1, quantity: 1, unit_price: 100.75)
+    invoice_item_2 = create(:invoice_item, invoice: invoice_2, quantity: 2, unit_price: 20.00)
+
+    create(:transaction, invoice: invoice_1, result: "success")
+    create(:transaction, invoice: invoice_2, result: "success")
+    get "/api/v1/merchants/#{merchant.id}/revenue?date=#{invoice_1.created_at}"
+
+    revenue = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(revenue['revenue']).to eq("100.75")
   end
 end
